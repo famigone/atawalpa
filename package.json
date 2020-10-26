@@ -16,7 +16,9 @@
     "react-dom": "^16.13.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "semantic-ui-react": "^2.0.0"
+    "semantic-ui-react": "^2.0.0",
+    "simpl-schema": "^1.10.2",
+    "underscore": "^1.11.0"
   },
   "meteor": {
     "mainModule": {

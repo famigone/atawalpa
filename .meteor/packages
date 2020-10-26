@@ -25,3 +25,7 @@ juliancwirko:postcss
 useraccounts:semantic-ui
 accounts-password
 session
+perak:mqtt-collection
+aldeed:simple-schema
+aldeed:collection2
+underscore

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types"; // ES6
 //import LoginForm from "./LoginForm.jsx";
 import BarraEstado from "./Dashboard/BarraEstado.jsx";
+import Footer from "./Dashboard/Footer.jsx";
 //import MenuPrincipal from "./MenuPrincipal.jsx";
 //import Footer from "./Dashboard/Footer.jsx";
 //import SidebarExampleSidebar from "./SidebarExampleSidebar.js";
@@ -52,6 +53,7 @@ export default class App extends Component {
         <BarraEstado />
         {this.getContentView()}
         <Segment />
+        <Footer />
       </div>
     );
   }
