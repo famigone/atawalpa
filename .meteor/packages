@@ -29,3 +29,4 @@ perak:mqtt-collection
 aldeed:simple-schema
 aldeed:collection2
 underscore
+mdg:validated-method

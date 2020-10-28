@@ -19,8 +19,8 @@ export const updateEvent = new ValidatedMethod({
   }
 });
 
-export const insertSensor = new ValidatedMethod({
-  name: "sensors.insert",
+export const insertTag = new ValidatedMethod({
+  name: "tags.insert",
   validate: new SimpleSchema({
     codigo: { type: String },
     activo: {
@@ -47,6 +47,6 @@ export const insertSensor = new ValidatedMethod({
   }).validator(),
   run(one) {
     one.activo = true;
-    Sensors.insert(one);
+    Tags.insert(one);
   }
 });

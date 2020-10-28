@@ -4,8 +4,8 @@ import { Session } from "meteor/session";
 import { Link } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 
-export default class MenuExampleSecondary extends Component {
-  state = { activeItem: "home", dl_id: Session.get("dl") };
+export default class BarraEstado extends Component {
+  state = { activeItem: "home" };
 
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name });
@@ -33,15 +33,10 @@ export default class MenuExampleSecondary extends Component {
           {/*<Image centered size="tiny" src="/img/ripioh_white.png" />*/}
           <b>CHAMAN</b>
         </Menu.Item>
-
-        <Menu.Item
-          as={Link}
-          to="/listadoconsultas"
-          onClick={this.handleItemClick}
-        >
+        <Menu.Item as={Link} to="/tags" onClick={this.handleItemClick}>
           <Icon name="tags" />
         </Menu.Item>
-        <Menu.Item as={Link} to="/nuevocontacto" onClick={this.handleItemClick}>
+        <Menu.Item as={Link} to="/za" onClick={this.handleItemClick}>
           <Icon name="sitemap" />
         </Menu.Item>
 

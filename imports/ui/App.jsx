@@ -52,7 +52,7 @@ export default class App extends Component {
       >
         <BarraEstado />
         {this.getContentView()}
-        <Segment />
+
         <Footer />
       </div>
     );

@@ -31,7 +31,7 @@ export default class Home extends Component {
         >
           <Container textAlign="center">
             {
-              "CHAMAN" /*<Image centered size="small" src="/img/logogrande.png" />*/
+              "CHAddddddddddddddddddddddddddMAN" /*<Image centered size="small" src="/img/logogrande.png" />*/
             }
           </Container>
         </Segment>
