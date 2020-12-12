@@ -1,5 +1,6 @@
 //este código tiene que estar disponible en servidor y cliente, para habilitar Optimistic UI.
 import { ValidatedMethod } from "meteor/mdg:validated-method";
+import Tags from "/imports/api/tags.js";
 
 export const updateEvent = new ValidatedMethod({
   name: "updateEvent",
@@ -22,7 +23,7 @@ export const updateEvent = new ValidatedMethod({
 export const insertTag = new ValidatedMethod({
   name: "tags.insert",
   validate: new SimpleSchema({
-    codigo: { type: String },
+    tag: { type: String },
     activo: {
       type: Boolean,
       optional: true,
