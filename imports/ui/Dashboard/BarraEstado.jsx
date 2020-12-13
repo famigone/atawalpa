@@ -31,7 +31,7 @@ export default class BarraEstado extends Component {
       <Menu inverted color="teal">
         <Menu.Item>
           {/*<Image centered size="tiny" src="/img/ripioh_white.png" />*/}
-          <b>CHAMAN</b>
+          <b>ATAWALPA</b>
         </Menu.Item>
         <Menu.Item as={Link} to="/tags" onClick={this.handleItemClick}>
           <Icon name="tags" />

@@ -2,10 +2,15 @@ import { Mongo } from "meteor/mongo";
 
 import { SimpleSchema } from "meteor/aldeed:simple-schema";
 
-export default Sensors = new Mongo.Collection("sensors");
+export default (Sensors = new Mongo.Collection("sensors"));
 
 Sensors.schema = new SimpleSchema({
   codigo: { type: String },
+  descripcion: { type: String },
+  tagId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
   activo: {
     type: Boolean,
     optional: true,

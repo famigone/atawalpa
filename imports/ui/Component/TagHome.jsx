@@ -4,6 +4,9 @@ import PropTypes from "prop-types"; // ES6
 import { insertTag } from "/api/methods.js";
 import ReactDOM from "react-dom";
 import { withTracker } from "meteor/react-meteor-data";
+import ModalSensor from "./modalSensor.jsx";
+import Sensores from "./Sensores.jsx";
+import LoaderExampleText from "./LoaderExampleText.js";
 import {
   BrowserRouter as Router,
   Switch,
@@ -28,12 +31,20 @@ import {
   Divider,
   Segment,
   Form,
+  Modal,
   Header
 } from "semantic-ui-react";
 
 //const App = () => (
 
 export class TagHome extends Component {
+  state = {
+    tag: "",
+    tagId: "",
+    habilitarBoton: false,
+    modalOpen: false
+  };
+
   handleSubmit(event) {
     event.preventDefault();
 
@@ -50,9 +61,6 @@ export class TagHome extends Component {
     insertTag.call(one, (err, res) => {
       if (err) {
         console.log(err);
-      } else {
-        console.log("ok");
-        // seteamos el nuevo Código
       }
     });
 
@@ -64,7 +72,7 @@ export class TagHome extends Component {
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <Form.Group widths="equal">
           <Form.Field>
-            <input ref="textInputCodigo" placeholder="sensor/codigo" />
+            <input ref="textInputCodigo" placeholder="tag" />
           </Form.Field>
         </Form.Group>
         <Button color="violet" type="submit" size="mini">
@@ -78,29 +86,41 @@ export class TagHome extends Component {
     return (
       <Table celled>
         <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>
-              <h4>TAG</h4>
-            </Table.HeaderCell>
-          </Table.Row>
+          <Table.Row />
         </Table.Header>
 
         <Table.Body>{this.renderFila()}</Table.Body>
       </Table>
     );
   }
-  clickFila(tagid) {
-    console.log(tagid);
+  clickFila(id, tag) {
+    this.setState({ tag: tag, tagId: id, habilitarBoton: true });
   }
+
   renderFila() {
     return this.props.tags.map(tag => (
-      <Table.Row key={tag._id} onClick={() => this.clickFila(tag._id)}>
+      <Table.Row key={tag._id} onClick={() => this.clickFila(tag._id, tag.tag)}>
         <Table.Cell collapsing>{tag.tag}</Table.Cell>
       </Table.Row>
     ));
   }
 
+  renderModal() {
+    return (
+      <ModalSensor
+        tagId={this.state.tagId}
+        tag={this.state.tag}
+        modalOpen={this.state.modalOpen}
+        handleClose={() => {
+          this.setState({ modalOpen: false });
+        }}
+      />
+    );
+  }
   render() {
+    if (this.props.isLoading) {
+      return <LoaderExampleText />;
+    }
     return (
       <Grid>
         <Grid.Row>
@@ -116,10 +136,34 @@ export class TagHome extends Component {
             </Segment>
           </Grid.Column>
           <Grid.Column width={11}>
-            <Segment />
+            <Segment raised>
+              <Header as="h2" floated="right">
+                <Button
+                  size="mini"
+                  color="violet"
+                  active={this.state.habilitarBoton}
+                  onClick={() => {
+                    this.setState({ modalOpen: true });
+                  }}
+                >
+                  NUEVO
+                </Button>
+              </Header>
+              <Header as="h2" dividing>
+                <Icon name="podcast" />
+                <Header.Content>
+                  {this.state.tag}
+                  <Header.Subheader>Sensores asociados al tag</Header.Subheader>
+                </Header.Content>
+              </Header>
+            </Segment>
+            <Segment raised>
+              <Sensores tagId={this.state.tagId} />
+            </Segment>
           </Grid.Column>
           <Grid.Column width={1} />
         </Grid.Row>
+        {this.renderModal()}
       </Grid>
     );
   }

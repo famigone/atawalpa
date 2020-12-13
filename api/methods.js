@@ -51,3 +51,40 @@ export const insertTag = new ValidatedMethod({
     Tags.insert(one);
   }
 });
+
+export const insertSensor = new ValidatedMethod({
+  name: "sensors.insert",
+  validate: new SimpleSchema({
+    codigo: { type: String },
+    descripcion: { type: String },
+    tagId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    activo: {
+      type: Boolean,
+      optional: true,
+      autoValue: function() {
+        return true;
+      }
+    }, //borrado lógico
+    createdBy: {
+      type: String,
+      optional: true,
+      autoValue: function() {
+        return this.userId;
+      }
+    },
+    createdAt: {
+      type: Date,
+      optional: true,
+      autoValue: function() {
+        return new Date();
+      }
+    }
+  }).validator(),
+  run(one) {
+    one.activo = true;
+    Sensors.insert(one);
+  }
+});

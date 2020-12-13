@@ -3,6 +3,7 @@ import { LinksCollection } from "/imports/api/links";
 import "../imports/api/events.js";
 import "../imports/api/sensors.js";
 import "../imports/api/tags.js";
+import "/api/server/publications.js";
 import "/api/methods.js";
 //import { Ruteador } from "/imports/startup/client/routes.js";
 

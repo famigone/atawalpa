@@ -2,8 +2,6 @@ import Sensors from "/imports/api/sensors.js";
 import Tags from "/imports/api/tags.js";
 import Events from "/imports/api/events.js";
 
-import { ReactiveAggregate } from "meteor/tunguska:reactive-aggregate";
-
 Meteor.publish("sensors", function() {
   return Sensors.find({ activo: true });
 });
@@ -12,8 +10,9 @@ Meteor.publish("tags", function() {
   return Tags.find({ activo: true });
 });
 
-Meteor.publish("sensorsOne", function(ids) {
-  return Sensors.find({ sensorid: ids, activo: true });
+Meteor.publish("sensorsOne", function(tagId) {
+  console.log("publi con: " + tagId);
+  return Sensors.find({ tagId: tagId, activo: true });
 });
 
 Meteor.publish("TagsOne", function(tag) {
