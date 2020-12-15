@@ -30,9 +30,7 @@ export default class Footer extends Component {
           }}
         >
           <Container textAlign="center">
-            {
-              "TOTΣM Lab" /*<Image centered size="small" src="/img/logogrande.png" />*/
-            }
+            {<Image centered src="/img/logo16white.png" />}
           </Container>
         </Segment>
       </div>

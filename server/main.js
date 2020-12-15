@@ -10,5 +10,14 @@ import "/api/methods.js";
 Meteor.startup(() => {
   //  render(Ruteador(), document.getElementById("app"));
   let server = Meteor.settings.mqttHost;
-  Events.mqttConnect(server, ["nivel/+"], { insert: true });
+  //Events.mqttConnect(server, ["nivel/+"], { insert: true });
+  listaTag = Tags.find({ activo: true }).fetch();
+  const arrayTags = new Array();
+  var i = 0;
+  Tags.find({ activo: true }).forEach(unTag => {
+    arrayTags.push(unTag.tag + "/+");
+  });
+  console.log(arrayTags);
+  Events.mqttConnect(server, arrayTags, { insert: true });
+  //Events.mqttConnect(server, [], { insert: true });
 });

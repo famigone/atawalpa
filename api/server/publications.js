@@ -11,7 +11,6 @@ Meteor.publish("tags", function() {
 });
 
 Meteor.publish("sensorsOne", function(tagId) {
-  console.log("publi con: " + tagId);
   return Sensors.find({ tagId: tagId, activo: true });
 });
 
@@ -26,4 +25,18 @@ Meteor.publish("events", function() {
 Meteor.publish("eventsOne", function(sensorname) {
   return Events.find({ topic: sensorname });
   //return Events.find();
+});
+const MAX = 100;
+Meteor.publish("eventsOneLimit", function(sensorname) {
+  const options = {
+    sort: { createdAt: -1 },
+    limit: MAX
+  };
+
+  return Events.find(
+    {
+      topic: sensorname
+    },
+    options
+  );
 });

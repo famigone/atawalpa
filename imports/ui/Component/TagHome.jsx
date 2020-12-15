@@ -121,16 +121,17 @@ export class TagHome extends Component {
     if (this.props.isLoading) {
       return <LoaderExampleText />;
     }
+
     return (
       <Grid>
         <Grid.Row>
           <Grid.Column width={1} />
           <Grid.Column width={3}>
-            <Segment>
+            <Segment raised>
               <Header dividing>Nuevo Tag</Header>
               {this.renderForm()}
             </Segment>
-            <Segment>
+            <Segment raised>
               <Header dividing>Tags Activos</Header>
               {this.renderTags()}
             </Segment>
@@ -158,7 +159,7 @@ export class TagHome extends Component {
               </Header>
             </Segment>
             <Segment raised>
-              <Sensores tagId={this.state.tagId} />
+              <Sensores tagId={this.state.tagId} tag={this.state.tag} />
             </Segment>
           </Grid.Column>
           <Grid.Column width={1} />

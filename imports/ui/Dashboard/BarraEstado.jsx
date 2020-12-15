@@ -30,13 +30,17 @@ export default class BarraEstado extends Component {
     return (
       <Menu inverted color="teal">
         <Menu.Item>
-          {/*<Image centered size="tiny" src="/img/ripioh_white.png" />*/}
-          <b>ATAWALPA</b>
+          <Image centered src="/img/logo32white.png" />
         </Menu.Item>
+        <Menu.Item>
+          {/*<Image centered size="tiny" src="/img/ripioh_white.png" />*/}
+          <h3>ATAWALPA</h3>
+        </Menu.Item>
+
         <Menu.Item as={Link} to="/tags" onClick={this.handleItemClick}>
           <Icon name="tags" />
         </Menu.Item>
-        <Menu.Item as={Link} to="/za" onClick={this.handleItemClick}>
+        <Menu.Item as={Link} to="/mosquitto" onClick={this.handleItemClick}>
           <Icon name="sitemap" />
         </Menu.Item>
 
