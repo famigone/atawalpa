@@ -82,7 +82,7 @@ export default class ModalSensor extends Component {
           open={this.props.modalOpen}
           onClose={this.props.handleClose}
           closeOnEscape={true}
-          //size={"fullscreen"}
+          size={"large"}
         >
           <Modal.Header>Nuevo sensor para {this.props.tag}</Modal.Header>
           <Modal.Content>{this.renderFormSensor()}</Modal.Content>

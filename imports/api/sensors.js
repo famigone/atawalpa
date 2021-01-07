@@ -1,7 +1,7 @@
 import { Mongo } from "meteor/mongo";
 
 import { SimpleSchema } from "meteor/aldeed:simple-schema";
-
+import Tags from "./tags.js";
 export default (Sensors = new Mongo.Collection("sensors"));
 
 Sensors.schema = new SimpleSchema({
@@ -31,6 +31,15 @@ Sensors.schema = new SimpleSchema({
     autoValue: function() {
       return new Date();
     }
+  }
+});
+
+Sensors.helpers({
+  tag() {
+    tagId = this.tagId;
+    const elTag = Tags.findOne(tagId);
+    if (!!elTag) return elTag.tag;
+    else return "";
   }
 });
 

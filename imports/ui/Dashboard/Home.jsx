@@ -29,12 +29,9 @@ export default class Home extends Component {
             bottom: "0"
           }}
         >
-          <Container textAlign="center">
-            {
-              "CHAddddddddddddddddddddddddddMAN" /*<Image centered size="small" src="/img/logogrande.png" />*/
-            }
-          </Container>
+          <Container textAlign="center">{}</Container>
         </Segment>
+        <Segment />
       </div>
     );
   }

@@ -7,7 +7,12 @@ import { insertSensor } from "/api/methods.js";
 import Sensors from "/imports/api/sensors.js";
 import Events from "/imports/api/events.js";
 import { Doughnut, Bar, Line, Scatter } from "react-chartjs-2";
-import LoaderExampleText from "/imports/ui/Component/LoaderExampleText.js";
+//const tf = require("@tensorflow/tfjs");
+import * as tf from "@tensorflow/tfjs";
+import * as tfvis from "@tensorflow/tfjs-vis";
+// Optional Load the binding:
+// Use '@tensorflow/tfjs-node-gpu' if running with GPU.
+//require("@tensorflow/tfjs-node");
 import {
   Icon,
   Label,
@@ -24,7 +29,7 @@ import {
   Header
 } from "semantic-ui-react";
 
-export class Telemetria extends Component {
+export class TelemetriaTensor extends Component {
   getSerie() {
     return this.props.events.map(event => ({
       x: event.createdAt,
@@ -32,10 +37,26 @@ export class Telemetria extends Component {
     }));
   }
 
-  render() {
-    if (this.props.isLoading) {
-      return <LoaderExampleText />;
-    }
+  tensor() {
+    //  const myFirstDataset = tf.data.array(this.props.events);
+    //  myFirstDataset.forEachAsync(e => console.log(e.message));
+
+    let values = [
+      { x: 1, y: 20 },
+      { x: 2, y: 30 },
+      { x: 3, y: 5 },
+      { x: 4, y: 12 }
+    ];
+    //let values = this.props.events;
+    tfvis.render.linechart(
+      document.getElementById("plot1"),
+      { values },
+
+      { width: 700 }
+    );
+  }
+
+  renderLine() {
     //console.log(this.getSerie());
     let data = {
       datasets: [
@@ -81,9 +102,37 @@ export class Telemetria extends Component {
       />
     );
   }
+
+  render() {
+    //console.log(this.props.events);
+    //this.tensor();
+    return (
+      <div>
+        <div className="plot" id="plot1" />
+        <Modal
+          centered={true}
+          open={this.props.modalOpen}
+          onClose={this.props.handleClose}
+          closeOnEscape={true}
+          size={"fullscreen"}
+        >
+          <Modal.Header>{this.props.tag}</Modal.Header>
+          <Modal.Content>{this.renderLine()}</Modal.Content>
+          <Modal.Actions>
+            <Button color="violet" onClick={() => dispatch({ type: "close" })}>
+              No
+            </Button>
+            <Button color="violet" onClick={() => dispatch({ type: "close" })}>
+              Yes
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      </div>
+    );
+  }
 }
 
-export default withTracker(({ sensorCodigo, tag, limite }) => {
+export default withTracker(({ sensorCodigo, tag }) => {
   //const handles = [Meteor.subscribe("eventsOne", sensorCodigo)];
   //console.log("sensorCodigo " + sensorCodigo + " tag " + tag);
   filtro = tag + "/" + sensorCodigo;
@@ -96,10 +145,9 @@ export default withTracker(({ sensorCodigo, tag, limite }) => {
     events: Events.find(
       { topic: filtro },
       {
-        sort: { createdAt: -1 },
-        limit: limite
+        sort: { createdAt: -1 }
       }
     ).fetch(),
     isLoading: isLoading
   };
-})(Telemetria);
+})(TelemetriaTensor);

@@ -84,7 +84,7 @@ export class TagHome extends Component {
 
   renderTags() {
     return (
-      <Table celled>
+      <Table singleLine selectable>
         <Table.Header>
           <Table.Row />
         </Table.Header>

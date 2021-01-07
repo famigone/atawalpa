@@ -14,10 +14,15 @@ Meteor.publish("sensorsOne", function(tagId) {
   return Sensors.find({ tagId: tagId, activo: true });
 });
 
+Meteor.publish("sensorsOneSensor", function(ids) {
+  return Sensors.find({ _id: ids, activo: true });
+});
 Meteor.publish("TagsOne", function(tag) {
   return Sensors.find({ tag: tag, activo: true });
 });
-
+Meteor.publish("TagsOneId", function(tagId) {
+  return Tags.find({ _id: tagId, activo: true });
+});
 Meteor.publish("events", function() {
   return Events.find();
   //return Events.find();
@@ -26,11 +31,13 @@ Meteor.publish("eventsOne", function(sensorname) {
   return Events.find({ topic: sensorname });
   //return Events.find();
 });
-const MAX = 100;
+const MAX_telemetria = 100;
+const MAX_mms = 1000;
+
 Meteor.publish("eventsOneLimit", function(sensorname) {
   const options = {
     sort: { createdAt: -1 },
-    limit: MAX
+    limit: MAX_mms
   };
 
   return Events.find(

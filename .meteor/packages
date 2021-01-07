@@ -29,3 +29,4 @@ aldeed:simple-schema
 aldeed:collection2
 underscore@1.0.10
 mdg:validated-method
+dburles:collection-helpers
