@@ -8,6 +8,8 @@ import Sensors from "/imports/api/sensors.js";
 import Events from "/imports/api/events.js";
 import { Doughnut, Bar, Line, Scatter } from "react-chartjs-2";
 import LoaderExampleText from "/imports/ui/Component/LoaderExampleText.js";
+import Plot from "react-plotly.js";
+
 import {
   Icon,
   Label,

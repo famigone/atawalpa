@@ -9,7 +9,8 @@ import Events from "/imports/api/events.js";
 import Tags from "/imports/api/tags.js";
 import Telemetria from "./Telemetria.jsx";
 import LineaBase from "./LineaBase.jsx";
-import Modelo from "./Modelo.jsx";
+//import Modelo from "./Modelo.jsx";
+import Entrenamiento from "./Entrenamiento.jsx";
 
 import LoaderExampleText from "/imports/ui/Component/LoaderExampleText.js";
 import { Doughnut, Bar, Line, Scatter } from "react-chartjs-2";
@@ -105,56 +106,18 @@ export class SensorHome extends Component {
       </Segment.Group>
     );
   }
-  renderModel() {
+
+  renderEntrenamiento() {
     return (
-      <Segment.Group raised>
-        <Segment raised>
-          <Header as="h4" dividing>
-            <Icon name="chart area" />
-            <Header.Content>
-              Modelo Predictivo
-              <Header.Subheader />
-            </Header.Content>
-          </Header>
-          <Modelo
-            sensorCodigo={this.props.elSensor.codigo}
-            tag={this.props.elSensor.tag()}
-            limite={const_limit_mms}
-            const_window_size={const_window_size}
-          />
-        </Segment>
-        <Segment textAlign="center">
-          <Button.Group labeled icon color="violet" inverted>
-            <Button icon="play" content="GENERAR DATASET" />
-            <Button icon="play" content="ENTRENAR MODELO" />
-            <Button icon="play" content="HACER PREDICCIÓN" />
-          </Button.Group>
-        </Segment>
-      </Segment.Group>
+      <Entrenamiento
+        sensorCodigo={this.props.elSensor.codigo}
+        tag={this.props.elSensor.tag()}
+        limite={const_limit_mms}
+        const_window_size={const_window_size}
+      />
     );
   }
-  renderEntranamiento() {
-    return (
-      <Segment.Group raised>
-        <Segment raised>
-          <Header as="h4" dividing>
-            <Icon name="chart area" />
-            <Header.Content>
-              Entrenamiento
-              <Header.Subheader />
-            </Header.Content>
-          </Header>
-        </Segment>
-        <Segment textAlign="center">
-          <Button.Group labeled icon color="violet" inverted>
-            <Button icon="play" content="GENERAR DATASET" />
-            <Button icon="play" content="ENTRENAR MODELO" />
-            <Button icon="play" content="HACER PREDICCIÓN" />
-          </Button.Group>
-        </Segment>
-      </Segment.Group>
-    );
-  }
+
   render() {
     if (this.props.isLoading) {
       return <LoaderExampleText />;
@@ -169,12 +132,10 @@ export class SensorHome extends Component {
           <Grid.Column width={8}>{this.renderTelemetria()}</Grid.Column>
           <Grid.Column width={8}>{this.renderMMS()}</Grid.Column>
         </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={16}>{this.renderEntranamiento()}</Grid.Column>
-        </Grid.Row>
+        <Grid.Row />
         <Grid.Row>
           <Grid.Column width={16}>
-            {this.renderModel()} <Segment />
+            {this.renderEntrenamiento()} <Segment />
           </Grid.Column>
         </Grid.Row>
       </Grid>

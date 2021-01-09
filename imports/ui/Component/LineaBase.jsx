@@ -99,7 +99,7 @@ export class LineaBase extends Component {
       r_avgs.push({ set: data.slice(i, i + window_size), avg: curr_avg });
       avg_prev = curr_avg;
     }
-
+    //  console.log(r_avgs);
     /////////////////////////////////////////
     let vector = [];
     let objetoOld, objetoNew;
@@ -120,7 +120,7 @@ export class LineaBase extends Component {
     //console.log(this.getSerie());
     let array = this.ComputeSMA(this.getSerie(), this.props.const_window_size);
     //console.log(this.getSerie());
-    //console.log(array);
+    //console.log(this.ComputeSMA(this.getSerie(), this.props.const_window_size));
     return <Line data={this.getDataConfig()} options={this.getDataOptions()} />;
   }
 }
