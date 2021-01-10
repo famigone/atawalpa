@@ -60,6 +60,12 @@ export class Telemetria extends Component {
         data={data}
         options={{
           maintainAspectRatio: true,
+          elements: {
+            point: {
+              radius: 0
+            }
+          },
+
           scales: {
             xAxes: [
               {

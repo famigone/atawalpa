@@ -64,6 +64,13 @@ export class LineaBase extends Component {
   getDataOptions() {
     var dataOptions = {
       maintainAspectRatio: true,
+
+      elements: {
+        point: {
+          radius: 0
+        }
+      },
+
       scales: {
         xAxes: [
           {

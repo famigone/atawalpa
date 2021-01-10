@@ -15,6 +15,8 @@ import {
   Icon,
   Label,
   Menu,
+  List,
+  Progress,
   Message,
   Table,
   Segment,
@@ -31,7 +33,14 @@ export class Entrenamiento extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      epoch_loss: []
+      epoch_loss: [],
+      layout: {
+        //title: "Create a Static Chart",
+        autosize: false,
+        width: 1000,
+        height: 500,
+        showlegend: false
+      }
     };
     this.clickGenerar = this.clickGenerar.bind(this);
     this.callback = this.callback.bind(this);
@@ -229,7 +238,7 @@ export class Entrenamiento extends Component {
   }
 
   callback(epoch, log) {
-    let epoch_loss = [];
+    let epoch_loss = this.state.epoch_loss;
     epoch_loss.push(log.loss);
     this.setState({ epoch_loss: epoch_loss });
     console.log(this.state.epoch_loss);
@@ -252,7 +261,7 @@ export class Entrenamiento extends Component {
     });
 
     let trainingsize = 70;
-    let n_epochs = 5;
+    let n_epochs = 50;
     let learningrate = 0.01;
     let n_hiddenlayers = 1;
 
@@ -269,11 +278,44 @@ export class Entrenamiento extends Component {
     return result;
   }
 
+  getY() {
+    var Y = [];
+    for (let k = 0; k <= this.state.epoch_loss.length; k++) {
+      Y[k] = k;
+    }
+    return Y;
+  }
+
+  getDatax() {
+    var laData = [
+      {
+        x: this.getY(),
+        y: this.state.epoch_loss,
+        type: "lines",
+        mode: "lines",
+        marker: { color: "red" }
+      }
+    ];
+    console.log(this.state.epoch_loss.length);
+    return (
+      <Plot
+        data={laData}
+        layout={this.state.layout}
+        //frames={this.state.frames}
+        //config={this.state.config}
+        //  onInitialized={figure => this.setState(figure)}
+        //  onUpdate={figure => this.setState(figure)}
+      />
+    );
+  }
+
   render() {
     //console.log(this.props.const_window_size);
     if (this.props.isLoading) {
       return <LoaderExampleText />;
     }
+
+    //let ray = this.getDatax();
     //console.log(this.getSerie());
     //let array = this.ComputeSMA(this.getSerie(), this.props.const_window_size);
     //console.log(this.getSerie());
@@ -288,6 +330,14 @@ export class Entrenamiento extends Component {
               <Header.Subheader />
             </Header.Content>
           </Header>
+          <center>{this.getDatax()}</center>
+        </Segment>
+        <Segment textAlign="center">
+          <Progress
+            percent={(this.state.epoch_loss.length * 100) / 50}
+            progress
+            indicating
+          />
         </Segment>
         <Segment textAlign="center">
           <Button.Group labeled icon color="violet" inverted>
