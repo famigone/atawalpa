@@ -116,6 +116,7 @@ export class LineaBase extends Component {
       objetoNew = { x: objetoOld.x, y: String(r_avgs[k].avg) };
       vector[k] = objetoNew;
     }
+
     return vector;
   }
 
@@ -133,25 +134,17 @@ export class LineaBase extends Component {
 }
 
 export default withTracker(
-  ({ sensorCodigo, tag, limite, const_window_size }) => {
+  ({ sensorCodigo, tag, limite, const_window_size, setSMA, eventos }) => {
     //const handles = [Meteor.subscribe("eventsOne", sensorCodigo)];
     //console.log("sensorCodigo " + sensorCodigo + " tag " + tag);
-    filtro = tag + "/" + sensorCodigo;
+    //filtro = tag + "/" + sensorCodigo;
     //const handles = [Meteor.subscribe("eventsOne", filtro)];
-    const handles = [Meteor.subscribe("eventsOneLimit", filtro)];
-    var isLoading = handles.some(handle => !handle.ready());
+    //const handles = [Meteor.subscribe("eventsOneLimit", filtro)];
+    //var isLoading = handles.some(handle => !handle.ready());
     //const elSensor = Sensors.findOne(sensorid);
 
     return {
-      events: Events.find(
-        { topic: filtro },
-        {
-          sort: { createdAt: -1 },
-          limit: limite
-        }
-      ).fetch(),
-      const_window_size: const_window_size,
-      isLoading: isLoading
+      events: eventos
     };
   }
 )(LineaBase);

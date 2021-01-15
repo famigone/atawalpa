@@ -44,61 +44,7 @@ export class Entrenamiento extends Component {
     };
     this.clickGenerar = this.clickGenerar.bind(this);
     this.callback = this.callback.bind(this);
-  }
-
-  getDataConfig() {
-    const data = {
-      datasets: [
-        {
-          label: this.props.sensorCodigo,
-          //backgroundColor: ["rgba(0,251, 105, 4 )"],
-          borderColor: "red",
-          backgroundColor: "red",
-          fill: false,
-          //label: {this.props.sensorCodigo},
-          borderColor: "red",
-          data: this.getSerie()
-        },
-        {
-          label: "MMS",
-          //backgroundColor: ["rgba(0,251, 105, 4 )"],
-          borderColor: "blue",
-          backgroundColor: "blue",
-          fill: false,
-          //label: {this.props.sensorCodigo},
-          borderColor: "blue",
-          data: this.ComputeSMA(this.getSerie(), this.props.const_window_size)
-        }
-      ]
-
-      // These labels appear in the legend and in the tooltips when hovering different arcs
-    };
-    return data;
-  }
-  getDataOptions() {
-    var dataOptions = {
-      maintainAspectRatio: true,
-      scales: {
-        xAxes: [
-          {
-            type: "time",
-            position: "bottom"
-          }
-        ],
-        yAxes: [
-          {
-            display: true,
-            ticks: {
-              beginAtZero: true
-
-              //stepValue: 20
-              //max: 2000
-            }
-          }
-        ]
-      }
-    };
-    return dataOptions;
+    this.trainModel = this.trainModel.bind(this);
   }
 
   trainModel(
@@ -184,50 +130,8 @@ export class Entrenamiento extends Component {
         }
       }
     });
-
+    this.props.setModel(model);
     return { model: model, stats: hist };
-  }
-
-  renderPerdida() {
-    return (
-      <Plot
-        data={[
-          {
-            x: [1, 2, 3],
-            y: [2, 6, 3],
-            type: "scatter",
-            mode: "lines+markers",
-            marker: { color: "red" }
-          },
-          {
-            x: [2, 1, 5],
-            y: [3, 3, 5],
-            type: "scatter",
-            mode: "lines+markers",
-            marker: { color: "blue" }
-          }
-        ]}
-        //layout={{width: 320, height: 240, title: 'A Fancy Plot'}}
-      />
-    );
-  }
-  ComputeSMAforEntrenamiento(data, window_size) {
-    let r_avgs = [],
-      avg_prev = 0;
-    for (let i = 0; i <= data.length - window_size; i++) {
-      let curr_avg = 0.0,
-        t = i + window_size;
-      for (let k = i; k < t && k <= data.length; k++) {
-        curr_avg += data[k]["y"] / window_size;
-      }
-      r_avgs.push({
-        set: data.slice(i, i + window_size),
-        avg: parseFloat(curr_avg)
-      });
-      avg_prev = curr_avg;
-    }
-    //console.log(r_avgs);
-    return r_avgs;
   }
 
   getSerie() {
@@ -241,15 +145,13 @@ export class Entrenamiento extends Component {
     let epoch_loss = this.state.epoch_loss;
     epoch_loss.push(log.loss);
     this.setState({ epoch_loss: epoch_loss });
-    console.log(this.state.epoch_loss);
+    //this.props.setModel(result);
+    //  console.log(this.state.epoch_loss);
   }
 
   clickGenerar() {
     let data = this.getSerie();
-    let sma_vec = this.ComputeSMAforEntrenamiento(
-      data,
-      this.props.const_window_size
-    );
+    let sma_vec = this.props.vectorSMA;
 
     let inputs = sma_vec.map(function(inp_f) {
       return inp_f["set"].map(function(val) {
@@ -260,10 +162,10 @@ export class Entrenamiento extends Component {
       return outp_f["avg"];
     });
 
-    let trainingsize = 70;
-    let n_epochs = 50;
-    let learningrate = 0.01;
-    let n_hiddenlayers = 1;
+    let trainingsize = this.props.trainingsize;
+    let n_epochs = this.props.n_epochs;
+    let learningrate = this.props.learningrate;
+    let n_hiddenlayers = this.props.n_hiddenlayers;
 
     let result = this.trainModel(
       inputs,
@@ -275,6 +177,7 @@ export class Entrenamiento extends Component {
       n_hiddenlayers,
       this.callback
     );
+
     return result;
   }
 
@@ -296,7 +199,7 @@ export class Entrenamiento extends Component {
         marker: { color: "red" }
       }
     ];
-    console.log(this.state.epoch_loss.length);
+    //console.log(this.state.epoch_loss.length);
     return (
       <Plot
         data={laData}
@@ -311,9 +214,6 @@ export class Entrenamiento extends Component {
 
   render() {
     //console.log(this.props.const_window_size);
-    if (this.props.isLoading) {
-      return <LoaderExampleText />;
-    }
 
     //let ray = this.getDatax();
     //console.log(this.getSerie());
@@ -324,7 +224,7 @@ export class Entrenamiento extends Component {
       <Segment.Group raised>
         <Segment raised>
           <Header as="h4" dividing>
-            <Icon name="chart area" />
+            <Icon name="sync" />
             <Header.Content>
               Entrenamiento
               <Header.Subheader />
@@ -334,7 +234,7 @@ export class Entrenamiento extends Component {
         </Segment>
         <Segment textAlign="center">
           <Progress
-            percent={(this.state.epoch_loss.length * 100) / 50}
+            percent={(this.state.epoch_loss.length * 100) / this.props.n_epochs}
             progress
             indicating
           />
@@ -355,25 +255,28 @@ export class Entrenamiento extends Component {
 }
 
 export default withTracker(
-  ({ sensorCodigo, tag, limite, const_window_size }) => {
-    //const handles = [Meteor.subscribe("eventsOne", sensorCodigo)];
-    //console.log("sensorCodigo " + sensorCodigo + " tag " + tag);
-    filtro = tag + "/" + sensorCodigo;
-    //const handles = [Meteor.subscribe("eventsOne", filtro)];
-    const handles = [Meteor.subscribe("eventsOneLimit", filtro)];
-    var isLoading = handles.some(handle => !handle.ready());
-    //const elSensor = Sensors.findOne(sensorid);
-
+  ({
+    sensorCodigo,
+    tag,
+    limite,
+    const_window_size,
+    setModel,
+    eventos,
+    vectorSMA,
+    trainingsize,
+    n_epochs,
+    learningrate,
+    n_hiddenlayers
+  }) => {
     return {
-      events: Events.find(
-        { topic: filtro },
-        {
-          sort: { createdAt: -1 },
-          limit: limite
-        }
-      ).fetch(),
+      events: eventos,
+      setModel: setModel,
       const_window_size: const_window_size,
-      isLoading: isLoading
+      vectorSMA: vectorSMA,
+      trainingsize: trainingsize,
+      n_epochs: n_epochs,
+      learningrate: learningrate,
+      n_hiddenlayers: n_hiddenlayers
     };
   }
 )(Entrenamiento);

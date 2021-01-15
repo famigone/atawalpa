@@ -51,7 +51,7 @@ class Sensores extends Component {
         <Table.Cell textAlign="right">
           <Button
             as={Link}
-            to={`/sensorhome/${sensor._id}`}
+            to={`/sensorhome/${sensor.codigo}/${sensor.tag()}`}
             basic
             color="violet"
             content=<center>

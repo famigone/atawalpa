@@ -14,8 +14,8 @@ Meteor.publish("sensorsOne", function(tagId) {
   return Sensors.find({ tagId: tagId, activo: true });
 });
 
-Meteor.publish("sensorsOneSensor", function(ids) {
-  return Sensors.find({ _id: ids, activo: true });
+Meteor.publish("sensorsOneSensor", function(codigo) {
+  return Sensors.find({ codigo: codigo, activo: true });
 });
 Meteor.publish("TagsOne", function(tag) {
   return Sensors.find({ tag: tag, activo: true });

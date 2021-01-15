@@ -18,8 +18,8 @@ import {
 const browserHistory = createBrowserHistory();
 
 function ChildSensor() {
-  let { id } = useParams();
-  return <SensorHome id={id} />;
+  let { codigo, tag } = useParams();
+  return <SensorHome codigo={codigo} tag={tag} />;
 }
 
 export const Ruteador = () => (
@@ -31,7 +31,11 @@ export const Ruteador = () => (
         </Route>
         <Route exact path="/mosquitto" component={EventHome} />
 
-        <Route exact path="/sensorhome/:id" children={<ChildSensor />} />
+        <Route
+          exact
+          path="/sensorhome/:codigo/:tag"
+          children={<ChildSensor />}
+        />
       </App>
     </Switch>
   </Router>

@@ -35,9 +35,6 @@ export class Telemetria extends Component {
   }
 
   render() {
-    if (this.props.isLoading) {
-      return <LoaderExampleText />;
-    }
     //console.log(this.getSerie());
     let data = {
       datasets: [
@@ -91,23 +88,16 @@ export class Telemetria extends Component {
   }
 }
 
-export default withTracker(({ sensorCodigo, tag, limite }) => {
+export default withTracker(({ sensorCodigo, tag, limite, eventos }) => {
   //const handles = [Meteor.subscribe("eventsOne", sensorCodigo)];
   //console.log("sensorCodigo " + sensorCodigo + " tag " + tag);
-  filtro = tag + "/" + sensorCodigo;
+  //filtro = tag + "/" + sensorCodigo;
   //const handles = [Meteor.subscribe("eventsOne", filtro)];
-  const handles = [Meteor.subscribe("eventsOneLimit", filtro)];
-  var isLoading = handles.some(handle => !handle.ready());
+  //const handles = [Meteor.subscribe("eventsOneLimit", filtro)];
+  //var isLoading = handles.some(handle => !handle.ready());
   //const elSensor = Sensors.findOne(sensorid);
 
   return {
-    events: Events.find(
-      { topic: filtro },
-      {
-        sort: { createdAt: -1 },
-        limit: limite
-      }
-    ).fetch(),
-    isLoading: isLoading
+    events: eventos
   };
 })(Telemetria);
