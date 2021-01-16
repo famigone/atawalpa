@@ -12,6 +12,7 @@ import LineaBase from "./LineaBase.jsx";
 //import Modelo from "./Modelo.jsx";
 import Entrenamiento from "./Entrenamiento.jsx";
 import Validacion from "./Validacion.jsx";
+import Prediccion from "./Prediccion.jsx";
 
 import LoaderExampleText from "/imports/ui/Component/LoaderExampleText.js";
 import { Doughnut, Bar, Line, Scatter } from "react-chartjs-2";
@@ -40,6 +41,7 @@ import {
 const const_limit_telemetria = 100;
 const const_limit_mms = 1000;
 const const_window_size = 50;
+
 export class SensorHome extends Component {
   constructor(props) {
     super(props);
@@ -149,6 +151,27 @@ export class SensorHome extends Component {
       />
     );
   }
+
+  renderPrediccion() {
+    var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
+    //  console.log("this.state.n_hiddenlayers: ", this.state.n_hiddenlayers);
+    return (
+      <Prediccion
+        sensorCodigo={this.props.elSensor.codigo}
+        tag={this.props.elSensor.tag()}
+        limite={const_limit_mms}
+        const_window_size={const_window_size}
+        //setModel={this.setModel}
+        model={this.state.model}
+        eventos={this.props.eventsPrediccion}
+        vectorSMA={vectorSMA}
+        trainingsize={this.state.trainingsize}
+        n_epochs={this.state.n_epochs}
+        learningrate={this.state.learningrate}
+        n_hiddenlayers={this.state.n_hiddenlayers}
+      />
+    );
+  }
   renderValidacion() {
     var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
     return (
@@ -211,8 +234,12 @@ export class SensorHome extends Component {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={1} />
+          <Grid.Column width={14}>{this.renderValidacion()}</Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={1} />
           <Grid.Column width={14}>
-            {this.renderValidacion()} <Segment />
+            {this.renderPrediccion()} <Segment />
           </Grid.Column>
           <Grid.Column width={1} />
         </Grid.Row>
@@ -245,6 +272,13 @@ export default withTracker(({ codigo, tag }) => {
       {
         sort: { createdAt: -1 },
         limit: const_limit_mms
+      }
+    ).fetch(),
+    eventsPrediccion: Events.find(
+      { topic: filtro },
+      {
+        sort: { createdAt: -1 },
+        limit: const_window_size
       }
     ).fetch(),
     isLoading: isLoading

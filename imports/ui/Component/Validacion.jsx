@@ -87,7 +87,7 @@ export class Validacion extends Component {
     var validacion = {
       type: "scatter",
       mode: "lines",
-      name: "Entrenamiento",
+      name: "Validación",
       x: eventosValidacion.map(function(evento) {
         return evento.createdAt;
       }),

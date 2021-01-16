@@ -196,7 +196,7 @@ export class Entrenamiento extends Component {
         y: this.state.epoch_loss,
         type: "lines",
         mode: "lines",
-        marker: { color: "red" }
+        marker: { color: "green" }
       }
     ];
     //console.log(this.state.epoch_loss.length);
@@ -236,7 +236,8 @@ export class Entrenamiento extends Component {
           <Progress
             percent={(this.state.epoch_loss.length * 100) / this.props.n_epochs}
             progress
-            indicating
+            //indicating
+            color={"teal"}
           />
         </Segment>
         <Segment textAlign="center">
