@@ -39,9 +39,9 @@ import {
 } from "semantic-ui-react";
 
 const const_limit_telemetria = 100;
-const const_limit_mms = 1000;
-const const_window_size = 50;
-
+const const_limit_mms = 10000;
+const const_window_size = 5;
+const const_future_steps = 5;
 export class SensorHome extends Component {
   constructor(props) {
     super(props);
@@ -134,7 +134,9 @@ export class SensorHome extends Component {
 
   renderEntrenamiento() {
     var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
+
     //  console.log("this.state.n_hiddenlayers: ", this.state.n_hiddenlayers);
+    console.log(this.state.sma_vec);
     return (
       <Entrenamiento
         sensorCodigo={this.props.elSensor.codigo}
@@ -144,6 +146,7 @@ export class SensorHome extends Component {
         setModel={this.setModel}
         eventos={this.props.eventsMMS}
         vectorSMA={vectorSMA}
+        setSMA={this.setSMA}
         trainingsize={this.state.trainingsize}
         n_epochs={this.state.n_epochs}
         learningrate={this.state.learningrate}
@@ -174,6 +177,7 @@ export class SensorHome extends Component {
   }
   renderValidacion() {
     var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
+    var invertido = vectorSMA.reverse();
     return (
       <Validacion
         sensorCodigo={this.props.elSensor.codigo}
@@ -182,8 +186,9 @@ export class SensorHome extends Component {
         limite={const_limit_mms}
         const_window_size={const_window_size}
         model={this.state.model}
-        vectorSMA={vectorSMA}
+        vectorSMA={invertido}
         trainingsize={this.state.trainingsize}
+        const_future_steps={const_future_steps}
       />
     );
   }
@@ -195,20 +200,24 @@ export class SensorHome extends Component {
   }
   ComputeSMA(data, window_size) {
     let r_avgs = [],
-      avg_prev = 0;
-    for (let i = 0; i <= data.length - window_size; i++) {
-      let curr_avg = 0.0,
-        t = i + window_size;
-      for (let k = i; k < t && k <= data.length; k++) {
-        curr_avg += data[k]["y"] / window_size;
-      }
+      avg_prev = 0,
+      x = 0;
+
+    for (let i = data.length; i > window_size + const_future_steps; i--) {
+      x = i - window_size - const_future_steps + 1;
+      //  console.log("x", x);
+      //  console.log("i", i);
+      //  console.log("data[x]", data[x]);
+      //  console.log("data[i]", data[i]);
       r_avgs.push({
-        set: data.slice(i, i + window_size),
-        avg: parseFloat(curr_avg)
+        set: data.slice(i - window_size, i),
+        avg: parseFloat(data[x]["y"])
       });
-      avg_prev = curr_avg;
+
+      //avg_prev = curr_avg;
     }
     //console.log(r_avgs);
+    //this.setState({ sma_vec: r_avgs });
     return r_avgs;
   }
 

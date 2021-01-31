@@ -150,7 +150,7 @@ export class Validacion extends Component {
       this.desdeEntrenamiento(),
       this.hastaEntrenamiento()
     );
-    console.log(this.desdeEntrenamiento() + "-" + this.hastaEntrenamiento());
+    //console.log(this.desdeEntrenamiento() + "-" + this.hastaEntrenamiento());
     //let val_train_x = inputs;
 
     //this.setState({ val_train_x: val_train_x });
@@ -249,7 +249,8 @@ export default withTracker(
     const_window_size,
     model,
     vectorSMA,
-    trainingsize
+    trainingsize,
+    const_future_steps
   }) => {
     //console.log(vectorSMA);
     return {
