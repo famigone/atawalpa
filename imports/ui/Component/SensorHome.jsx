@@ -39,9 +39,9 @@ import {
 } from "semantic-ui-react";
 
 const const_limit_telemetria = 100;
-const const_limit_mms = 10000;
+const const_limit_mms = 1000;
 const const_window_size = 5;
-const const_future_steps = 5;
+const const_future_steps = 10;
 export class SensorHome extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +49,7 @@ export class SensorHome extends Component {
       model: [],
       sma_vec: [],
       trainingsize: 70,
-      n_epochs: 5,
+      n_epochs: 50,
       learningrate: 0.01,
       n_hiddenlayers: 1
     };
@@ -136,7 +136,7 @@ export class SensorHome extends Component {
     var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
 
     //  console.log("this.state.n_hiddenlayers: ", this.state.n_hiddenlayers);
-    console.log(this.state.sma_vec);
+    //  console.log(this.state.sma_vec);
     return (
       <Entrenamiento
         sensorCodigo={this.props.elSensor.codigo}
@@ -165,6 +165,7 @@ export class SensorHome extends Component {
         limite={const_limit_mms}
         const_window_size={const_window_size}
         //setModel={this.setModel}
+        const_future_steps={const_future_steps}
         model={this.state.model}
         eventos={this.props.eventsPrediccion}
         vectorSMA={vectorSMA}

@@ -85,7 +85,7 @@ export class Prediccion extends Component {
     let last_date = new Date(timestamps_d[0]);
     console.log("timestamps_d[0] ", timestamps_d[0]);
     console.log("new Date(timestamps_d[0]) ", last_date);
-    let add_days = 2;
+    let add_days = this.props.const_future_steps;
     console.log("last_date antes ", last_date);
     last_date.setDate(last_date.getDate() + add_days);
     console.log("last_date despues ", last_date);
@@ -252,7 +252,8 @@ export default withTracker(
     const_window_size,
     model,
     vectorSMA,
-    trainingsize
+    trainingsize,
+    const_future_steps
   }) => {
     //console.log(vectorSMA);
     return {
@@ -260,7 +261,8 @@ export default withTracker(
       const_window_size: const_window_size,
       model: model,
       trainingsize: trainingsize,
-      vectorSMA: vectorSMA
+      vectorSMA: vectorSMA,
+      const_future_steps: const_future_steps
       //    isLoading: isLoading
     };
   }

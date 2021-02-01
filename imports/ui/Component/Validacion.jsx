@@ -63,6 +63,7 @@ export class Validacion extends Component {
       }),
       line: { color: "#17BECF" }
     };
+
     var eventosDesdeVentana = this.props.events.slice(
       this.desdeEntrenamiento(),
       this.hastaEntrenamiento()
@@ -120,7 +121,11 @@ export class Validacion extends Component {
   }
   hastaEntrenamiento() {
     //return this.props.events.length - this.props.const_window_size;
-    return this.props.events.length - this.props.const_window_size;
+    return (
+      this.props.events.length -
+      this.props.const_window_size -
+      this.props.const_future_steps
+    );
   }
   desdeValidacion() {
     return 0;
@@ -161,7 +166,7 @@ export class Validacion extends Component {
       this.props.model["model"]
     );
     this.setState({ val_train_y: val_train_y });
-    //console.log(val_train_y);
+    //  console.log("val_train_y", val_train_y);
     // validate on unseen
     let val_unseen_x = inputs.slice(
       this.desdeValidacion(),
@@ -173,7 +178,7 @@ export class Validacion extends Component {
       this.props.model["model"]
     );
     this.setState({ val_unseen_y: val_unseen_y });
-
+    //  console.log("val_unseen_x", val_unseen_x);
     let timestamps_a = data_raw.map(function(val) {
       return val["timestamp"];
     });
@@ -257,6 +262,7 @@ export default withTracker(
       events: eventos,
       const_window_size: const_window_size,
       model: model,
+      const_future_steps: const_future_steps,
       trainingsize: trainingsize,
       vectorSMA: vectorSMA
       //    isLoading: isLoading
