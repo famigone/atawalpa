@@ -201,7 +201,7 @@ export class Validacion extends Component {
       );
 
     let sma = sma_vec.map(function(val) {
-      return val["avg"];
+      return val["y"];
     });
     let prices = data_raw.map(function(val) {
       return parseFloat(val["y"]);

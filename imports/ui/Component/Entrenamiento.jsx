@@ -33,6 +33,7 @@ export class Entrenamiento extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showModal: false,
       epoch_loss: [],
       layout: {
         //title: "Create a Static Chart",
@@ -59,7 +60,7 @@ export class Entrenamiento extends Component {
   ) {
     const input_layer_shape = window_size;
     const input_layer_neurons = 100;
-
+    const const_future_steps = 10;
     //aca debería decir 1 uno, pero si pongo 2 pincha
     const rnn_input_layer_features = 2;
     const rnn_input_layer_timesteps =
@@ -148,18 +149,47 @@ export class Entrenamiento extends Component {
     //this.props.setModel(result);
     //  console.log(this.state.epoch_loss);
   }
+  getSerie() {
+    return this.props.eventsMMS.map(event => ({
+      x: event.createdAt,
+      y: event.message
+    }));
+  }
+  ComputeSMA(data, window_size) {
+    //console.log("data", data);
+    let r_avgs = [],
+      avg_prev = 0,
+      x = 0;
+    const const_future_steps = 10;
+    for (let i = data.length; i > window_size + const_future_steps; i--) {
+      x = i - window_size - const_future_steps + 1;
+
+      r_avgs.push({
+        set: data.slice(i - window_size, i),
+        y: parseFloat(data[x]["y"])
+      });
+    }
+    //console.log("r_avgs", r_avgs);
+
+    return r_avgs;
+  }
 
   clickGenerar() {
-    let data = this.getSerie();
-    let sma_vec = this.props.vectorSMA;
-
+    //console.log(data);
+    // aca sale NaN
+    let sma_vec = this.ComputeSMA(
+      this.getSerie(),
+      this.props.const_window_size
+    );
+    this.props.setTensor(sma_vec);
     let inputs = sma_vec.map(function(inp_f) {
       return inp_f["set"].map(function(val) {
         return parseFloat(val["y"]);
       });
     });
+
     let outputs = sma_vec.map(function(outp_f) {
-      return outp_f["avg"];
+      return outp_f["y"];
     });
 
     let trainingsize = this.props.trainingsize;
@@ -211,7 +241,34 @@ export class Entrenamiento extends Component {
       />
     );
   }
-
+  renderModal() {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <Modal
+        closeIcon
+        open={open}
+        trigger={<Button>Show Modal</Button>}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+      >
+        <Header icon="archive" content="Archive Old Messages" />
+        <Modal.Content>
+          <p>
+            Your inbox is getting full, would you like us to enable automatic
+            archiving of old messages?
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color="red" onClick={() => setOpen(false)}>
+            <Icon name="remove" /> No
+          </Button>
+          <Button color="green" onClick={() => setOpen(false)}>
+            <Icon name="checkmark" /> Yes
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    );
+  }
   render() {
     //console.log(this.props.const_window_size);
 
@@ -220,6 +277,7 @@ export class Entrenamiento extends Component {
     //let array = this.ComputeSMA(this.getSerie(), this.props.const_window_size);
     //console.log(this.getSerie());
     //console.log(array);
+
     return (
       <Segment.Group raised>
         <Segment raised>
@@ -248,6 +306,12 @@ export class Entrenamiento extends Component {
               //onClick={e => this.clickGenerar(e)}
               onClick={this.clickGenerar.bind(this)}
             />
+            <Button
+              icon="cog"
+              content="Parametrizar"
+              //onClick={e => this.clickGenerar(e)}
+              onClick={this.clickGenerar.bind(this)}
+            />
           </Button.Group>
         </Segment>
       </Segment.Group>
@@ -263,21 +327,25 @@ export default withTracker(
     const_window_size,
     setModel,
     eventos,
-    vectorSMA,
+    //vectorSMA,
     trainingsize,
     n_epochs,
     learningrate,
-    n_hiddenlayers
+    n_hiddenlayers,
+    eventsMMS,
+    setTensor
   }) => {
     return {
       events: eventos,
       setModel: setModel,
       const_window_size: const_window_size,
-      vectorSMA: vectorSMA,
+      //  vectorSMA: vectorSMA,
       trainingsize: trainingsize,
       n_epochs: n_epochs,
       learningrate: learningrate,
-      n_hiddenlayers: n_hiddenlayers
+      n_hiddenlayers: n_hiddenlayers,
+      eventsMMS: eventsMMS,
+      setTensor: setTensor
     };
   }
 )(Entrenamiento);

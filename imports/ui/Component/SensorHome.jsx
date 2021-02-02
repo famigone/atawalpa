@@ -48,23 +48,24 @@ export class SensorHome extends Component {
     this.state = {
       model: [],
       sma_vec: [],
+      tensor: [],
       trainingsize: 70,
-      n_epochs: 50,
+      n_epochs: 5,
       learningrate: 0.01,
       n_hiddenlayers: 1
     };
     this.setModel = this.setModel.bind(this);
-    this.setSMA = this.setSMA.bind(this);
-    //this.callback = this.callback.bind(this);
+    //this.setSMA = this.setSMA.bind(this);
+    this.setTensor = this.setTensor.bind(this);
   }
 
   setModel(theModel) {
     //console.log(theModel);
     this.setState({ model: theModel });
   }
-  setSMA(SMA) {
+  setTensor(tensor) {
     //console.log(theModel);
-    this.setState({ setSMA: SMA });
+    this.setState({ tensor: tensor });
   }
 
   renderHeader() {
@@ -133,10 +134,6 @@ export class SensorHome extends Component {
   }
 
   renderEntrenamiento() {
-    var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
-
-    //  console.log("this.state.n_hiddenlayers: ", this.state.n_hiddenlayers);
-    //  console.log(this.state.sma_vec);
     return (
       <Entrenamiento
         sensorCodigo={this.props.elSensor.codigo}
@@ -145,30 +142,28 @@ export class SensorHome extends Component {
         const_window_size={const_window_size}
         setModel={this.setModel}
         eventos={this.props.eventsMMS}
-        vectorSMA={vectorSMA}
         setSMA={this.setSMA}
         trainingsize={this.state.trainingsize}
         n_epochs={this.state.n_epochs}
         learningrate={this.state.learningrate}
         n_hiddenlayers={this.state.n_hiddenlayers}
+        eventsMMS={this.props.eventsMMS}
+        setTensor={this.setTensor}
       />
     );
   }
 
   renderPrediccion() {
-    var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
-    //  console.log("this.state.n_hiddenlayers: ", this.state.n_hiddenlayers);
     return (
       <Prediccion
         sensorCodigo={this.props.elSensor.codigo}
         tag={this.props.elSensor.tag()}
         limite={const_limit_mms}
         const_window_size={const_window_size}
-        //setModel={this.setModel}
         const_future_steps={const_future_steps}
         model={this.state.model}
         eventos={this.props.eventsPrediccion}
-        vectorSMA={vectorSMA}
+        vectorSMA={this.state.tensor}
         trainingsize={this.state.trainingsize}
         n_epochs={this.state.n_epochs}
         learningrate={this.state.learningrate}
@@ -177,8 +172,6 @@ export class SensorHome extends Component {
     );
   }
   renderValidacion() {
-    var vectorSMA = this.ComputeSMA(this.getSerie(), const_window_size);
-    var invertido = vectorSMA.reverse();
     return (
       <Validacion
         sensorCodigo={this.props.elSensor.codigo}
@@ -187,41 +180,12 @@ export class SensorHome extends Component {
         limite={const_limit_mms}
         const_window_size={const_window_size}
         model={this.state.model}
-        vectorSMA={invertido}
+        vectorSMA={this.state.tensor.reverse()}
         trainingsize={this.state.trainingsize}
         const_future_steps={const_future_steps}
       />
     );
   }
-  getSerie() {
-    return this.props.eventsMMS.map(event => ({
-      x: event.createdAt,
-      y: event.message
-    }));
-  }
-  ComputeSMA(data, window_size) {
-    let r_avgs = [],
-      avg_prev = 0,
-      x = 0;
-
-    for (let i = data.length; i > window_size + const_future_steps; i--) {
-      x = i - window_size - const_future_steps + 1;
-      //  console.log("x", x);
-      //  console.log("i", i);
-      //  console.log("data[x]", data[x]);
-      //  console.log("data[i]", data[i]);
-      r_avgs.push({
-        set: data.slice(i - window_size, i),
-        avg: parseFloat(data[x]["y"])
-      });
-
-      //avg_prev = curr_avg;
-    }
-    //console.log(r_avgs);
-    //this.setState({ sma_vec: r_avgs });
-    return r_avgs;
-  }
-
   render() {
     if (this.props.isLoading) {
       return <LoaderExampleText />;
@@ -233,8 +197,9 @@ export class SensorHome extends Component {
           <Grid.Column width={16}>{this.renderHeader()}</Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={8}>{this.renderTelemetria()}</Grid.Column>
-          <Grid.Column width={8}>{this.renderMMS()}</Grid.Column>
+          <Grid.Column width={1} />
+          <Grid.Column width={14}>{this.renderTelemetria()}</Grid.Column>
+          <Grid.Column width={1} />
         </Grid.Row>
         <Grid.Row />
         <Grid.Row>
