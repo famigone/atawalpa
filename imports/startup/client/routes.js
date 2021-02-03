@@ -5,7 +5,8 @@ import App from "../../ui/App.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
 import Home from "../../ui/Dashboard/Home.jsx";
 import TagHome from "../../ui/Component/TagHome.jsx";
-import SensorHome from "/imports/ui/Component/SensorHome.jsx";
+
+import SensorParam from "/imports/ui/Component/SensorParam.jsx";
 import EventHome from "/imports/ui/Component/events/EventHome.jsx";
 import {
   Router,
@@ -19,7 +20,7 @@ const browserHistory = createBrowserHistory();
 
 function ChildSensor() {
   let { codigo, tag } = useParams();
-  return <SensorHome codigo={codigo} tag={tag} />;
+  return <SensorParam codigo={codigo} tag={tag} />;
 }
 
 export const Ruteador = () => (

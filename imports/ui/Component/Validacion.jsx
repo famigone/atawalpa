@@ -99,22 +99,11 @@ export class Validacion extends Component {
     var data = [real, entrenamiento, validacion];
 
     //  console.log(entrenamiento);
-    return (
-      <Plot
-        data={data}
-        layout={this.state.layout}
-        //frames={this.state.frames}
-        //config={this.state.config}
-        //  onInitialized={figure => this.setState(figure)}
-        //  onUpdate={figure => this.setState(figure)}
-      />
-    );
+    return <Plot data={data} layout={this.state.layout} />;
   }
 
   desdeEntrenamiento() {
     return (
-      //this.props.events.length -
-      //Math.floor((this.props.trainingsize / 100) * this.props.events.length)
       this.props.events.length -
       Math.floor((this.props.trainingsize / 100) * this.props.events.length)
     );
@@ -147,27 +136,16 @@ export class Validacion extends Component {
     let trainingsize = this.props.trainingsize;
     let window_size = this.props.const_window_size;
     let data_raw = this.props.events;
-    // validate on training
-
-    //  inputs.length - Math.floor((trainingsize / 100) * inputs.length);
 
     let val_train_x = inputs.slice(
       this.desdeEntrenamiento(),
       this.hastaEntrenamiento()
     );
-    //console.log(this.desdeEntrenamiento() + "-" + this.hastaEntrenamiento());
-    //let val_train_x = inputs;
-
-    //this.setState({ val_train_x: val_train_x });
-    //console.log(val_train_x[0]);
-    //console.log("saco desde " + desde + " hasta " + hasta);
     let val_train_y = this.makePredictions(
       val_train_x,
       this.props.model["model"]
     );
     this.setState({ val_train_y: val_train_y });
-    //  console.log("val_train_y", val_train_y);
-    // validate on unseen
     let val_unseen_x = inputs.slice(
       this.desdeValidacion(),
       this.hastaValidacion()
@@ -178,7 +156,7 @@ export class Validacion extends Component {
       this.props.model["model"]
     );
     this.setState({ val_unseen_y: val_unseen_y });
-    //  console.log("val_unseen_x", val_unseen_x);
+
     let timestamps_a = data_raw.map(function(val) {
       return val["timestamp"];
     });
@@ -189,14 +167,15 @@ export class Validacion extends Component {
       .splice(
         window_size,
         data_raw.length -
-          Math.floor(((100 - trainingsize) / 100) * data_raw.length)
+          Math.floor(((100 - this.props.trainingsize) / 100) * data_raw.length)
       ); //.splice(window_size, data_raw.length);
     let timestamps_c = data_raw
       .map(function(val) {
         return val["timestamp"];
       })
       .splice(
-        window_size + Math.floor((trainingsize / 100) * inputs.length),
+        window_size +
+          Math.floor((this.props.trainingsize / 100) * inputs.length),
         inputs.length
       );
 
@@ -206,7 +185,10 @@ export class Validacion extends Component {
     let prices = data_raw.map(function(val) {
       return parseFloat(val["y"]);
     });
-    sma = sma.slice(0, Math.floor((trainingsize / 100) * sma.length));
+    sma = sma.slice(
+      0,
+      Math.floor((this.props.trainingsize / 100) * sma.length)
+    );
   }
 
   makePredictions(X, model) {

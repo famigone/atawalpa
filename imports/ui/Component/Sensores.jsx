@@ -38,10 +38,16 @@ import {
 
 class Sensores extends Component {
   state = {
+    sensor: "",
     sensorId: "",
     sensorCodigo: "",
-    modalOpen: false
+    modalOpen: false,
+    visible: false
   };
+
+  handleClose = () => this.setState({ modalOpen: false, visible: false });
+  openModalWithSensor = sensor =>
+    this.setState({ modalOpen: true, sensor: sensor });
 
   renderFila() {
     return this.props.sensores.map(sensor => (
@@ -49,6 +55,15 @@ class Sensores extends Component {
         <Table.Cell collapsing>{sensor.codigo}</Table.Cell>
         <Table.Cell collapsing>{sensor.descripcion}</Table.Cell>
         <Table.Cell textAlign="right">
+          <Button
+            onClick={() => this.openModalWithSensor(sensor)}
+            basic
+            color="violet"
+            content=<center>
+              <Icon name="angle left" />
+            </center>
+            size="mini"
+          />
           <Button
             as={Link}
             to={`/sensorhome/${sensor.codigo}/${sensor.tag()}`}
@@ -89,10 +104,8 @@ class Sensores extends Component {
   renderModal() {
     return (
       <TelemetriaTensor
-        tagId={this.props.tagId}
         tag={this.props.tag}
-        sensorId={this.state.sensorId}
-        sensorCodigo={this.state.sensorCodigo}
+        sensor={this.state.sensor}
         modalOpen={this.state.modalOpen}
         handleClose={() => {
           this.setState({ modalOpen: false });

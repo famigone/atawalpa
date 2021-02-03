@@ -41,11 +41,11 @@ export class Telemetria extends Component {
         {
           label: this.props.sensorCodigo,
           //backgroundColor: ["rgba(0,251, 105, 4 )"],
-          borderColor: "red",
-          backgroundColor: "red",
+          borderColor: "blue",
+          backgroundColor: "blue",
           fill: false,
           //label: {this.props.sensorCodigo},
-          borderColor: "red",
+          borderColor: "blue",
           data: this.getSerie()
         }
       ]
@@ -89,14 +89,6 @@ export class Telemetria extends Component {
 }
 
 export default withTracker(({ sensorCodigo, tag, limite, eventos }) => {
-  //const handles = [Meteor.subscribe("eventsOne", sensorCodigo)];
-  //console.log("sensorCodigo " + sensorCodigo + " tag " + tag);
-  //filtro = tag + "/" + sensorCodigo;
-  //const handles = [Meteor.subscribe("eventsOne", filtro)];
-  //const handles = [Meteor.subscribe("eventsOneLimit", filtro)];
-  //var isLoading = handles.some(handle => !handle.ready());
-  //const elSensor = Sensors.findOne(sensorid);
-
   return {
     events: eventos
   };

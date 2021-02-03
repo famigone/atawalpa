@@ -16,12 +16,6 @@ import Prediccion from "./Prediccion.jsx";
 
 import LoaderExampleText from "/imports/ui/Component/LoaderExampleText.js";
 import { Doughnut, Bar, Line, Scatter } from "react-chartjs-2";
-//const tf = require("@tensorflow/tfjs");
-import * as tf from "@tensorflow/tfjs";
-import * as tfvis from "@tensorflow/tfjs-vis";
-// Optional Load the binding:
-// Use '@tensorflow/tfjs-node-gpu' if running with GPU.
-//require("@tensorflow/tfjs-node");
 import {
   Icon,
   Label,
@@ -38,21 +32,13 @@ import {
   Header
 } from "semantic-ui-react";
 
-const const_limit_telemetria = 100;
-const const_limit_mms = 1000;
-const const_window_size = 5;
-const const_future_steps = 10;
 export class SensorHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
       model: [],
       sma_vec: [],
-      tensor: [],
-      trainingsize: 70,
-      n_epochs: 5,
-      learningrate: 0.01,
-      n_hiddenlayers: 1
+      tensor: []
     };
     this.setModel = this.setModel.bind(this);
     //this.setSMA = this.setSMA.bind(this);
@@ -83,70 +69,20 @@ export class SensorHome extends Component {
     );
   }
 
-  renderTelemetria() {
-    return (
-      <Segment.Group raised>
-        <Segment raised>
-          <Header as="h4" dividing>
-            <Icon name="chart line" />
-            <Header.Content>
-              Telemetría
-              <Header.Subheader />
-            </Header.Content>
-          </Header>
-          <Telemetria
-            eventos={this.props.eventsTelemetria}
-            sensorCodigo={this.props.elSensor.codigo}
-            tag={this.props.elSensor.tag()}
-            limite={const_limit_telemetria}
-          />
-        </Segment>
-        <Segment>{const_limit_telemetria} puntos de datos</Segment>
-      </Segment.Group>
-    );
-  }
-  renderMMS() {
-    return (
-      <Segment.Group raised>
-        <Segment raised>
-          <Header as="h4" dividing>
-            <Icon name="chart area" />
-            <Header.Content>
-              Media Móvil Simple
-              <Header.Subheader />
-            </Header.Content>
-          </Header>
-          <LineaBase
-            eventos={this.props.eventsMMS}
-            sensorCodigo={this.props.elSensor.codigo}
-            tag={this.props.elSensor.tag()}
-            limite={const_limit_mms}
-            const_window_size={const_window_size}
-            setSMA={this.setSMA}
-          />
-        </Segment>
-        <Segment>
-          {const_limit_mms} puntos de datos - {const_window_size} de ventana
-          móvil
-        </Segment>
-      </Segment.Group>
-    );
-  }
-
   renderEntrenamiento() {
     return (
       <Entrenamiento
         sensorCodigo={this.props.elSensor.codigo}
         tag={this.props.elSensor.tag()}
-        limite={const_limit_mms}
-        const_window_size={const_window_size}
+        limite={this.props.config.const_limit_mms}
+        const_window_size={this.props.config.const_window_size}
         setModel={this.setModel}
         eventos={this.props.eventsMMS}
         setSMA={this.setSMA}
-        trainingsize={this.state.trainingsize}
-        n_epochs={this.state.n_epochs}
-        learningrate={this.state.learningrate}
-        n_hiddenlayers={this.state.n_hiddenlayers}
+        trainingsize={this.props.config.trainingsize}
+        n_epochs={this.props.config.n_epochs}
+        learningrate={this.props.config.learningrate}
+        n_hiddenlayers={this.props.config.n_hiddenlayers}
         eventsMMS={this.props.eventsMMS}
         setTensor={this.setTensor}
       />
@@ -158,16 +94,16 @@ export class SensorHome extends Component {
       <Prediccion
         sensorCodigo={this.props.elSensor.codigo}
         tag={this.props.elSensor.tag()}
-        limite={const_limit_mms}
-        const_window_size={const_window_size}
-        const_future_steps={const_future_steps}
+        limite={this.props.config.const_limit_mms}
+        const_window_size={this.props.config.const_window_size}
+        const_future_steps={this.props.config.const_future_steps + 1}
         model={this.state.model}
         eventos={this.props.eventsPrediccion}
         vectorSMA={this.state.tensor}
-        trainingsize={this.state.trainingsize}
-        n_epochs={this.state.n_epochs}
-        learningrate={this.state.learningrate}
-        n_hiddenlayers={this.state.n_hiddenlayers}
+        trainingsize={this.props.config.trainingsize}
+        n_epochs={this.props.config.n_epochs}
+        learningrate={this.props.config.learningrate}
+        n_hiddenlayers={this.props.config.n_hiddenlayers}
       />
     );
   }
@@ -177,12 +113,12 @@ export class SensorHome extends Component {
         sensorCodigo={this.props.elSensor.codigo}
         eventos={this.props.eventsMMS}
         tag={this.props.elSensor.tag()}
-        limite={const_limit_mms}
-        const_window_size={const_window_size}
+        limite={this.props.config.const_limit_mms}
+        const_window_size={this.props.config.const_window_size}
         model={this.state.model}
         vectorSMA={this.state.tensor.reverse()}
-        trainingsize={this.state.trainingsize}
-        const_future_steps={const_future_steps}
+        trainingsize={this.props.config.trainingsize}
+        const_future_steps={this.props.config.const_future_steps + 1}
       />
     );
   }
@@ -193,14 +129,6 @@ export class SensorHome extends Component {
 
     return (
       <Grid>
-        <Grid.Row>
-          <Grid.Column width={16}>{this.renderHeader()}</Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={1} />
-          <Grid.Column width={14}>{this.renderTelemetria()}</Grid.Column>
-          <Grid.Column width={1} />
-        </Grid.Row>
         <Grid.Row />
         <Grid.Row>
           <Grid.Column width={1} />
@@ -223,7 +151,7 @@ export class SensorHome extends Component {
   }
 }
 
-export default withTracker(({ codigo, tag }) => {
+export default withTracker(({ codigo, tag, config }) => {
   filtro = tag + "/" + codigo;
   //const handles = [Meteor.subscribe("eventsOne", filtro)];
 
@@ -235,25 +163,20 @@ export default withTracker(({ codigo, tag }) => {
   var isLoading = handles.some(handle => !handle.ready());
   return {
     elSensor: Sensors.findOne({ codigo: codigo }),
-    eventsTelemetria: Events.find(
-      { topic: filtro },
-      {
-        sort: { createdAt: -1 },
-        limit: const_limit_telemetria
-      }
-    ).fetch(),
+    config: config,
+
     eventsMMS: Events.find(
       { topic: filtro },
       {
         sort: { createdAt: -1 },
-        limit: const_limit_mms
+        limit: config.const_limit_mms
       }
     ).fetch(),
     eventsPrediccion: Events.find(
       { topic: filtro },
       {
         sort: { createdAt: -1 },
-        limit: const_window_size
+        limit: config.const_window_size
       }
     ).fetch(),
     isLoading: isLoading

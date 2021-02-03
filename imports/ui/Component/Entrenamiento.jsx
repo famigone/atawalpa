@@ -8,8 +8,10 @@ import Sensors from "/imports/api/sensors.js";
 import Events from "/imports/api/events.js";
 import { Doughnut, Bar, Line, Scatter } from "react-chartjs-2";
 import LoaderExampleText from "/imports/ui/Component/LoaderExampleText.js";
+import ModalForm from "/imports/ui/Component/modalform.jsx";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
+import MiMessage from "/imports/ui/Component/MiMessage.jsx";
 import Plot from "react-plotly.js";
 import {
   Icon,
@@ -33,7 +35,8 @@ export class Entrenamiento extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
+      modalOpen: false,
+      visible: false,
       epoch_loss: [],
       layout: {
         //title: "Create a Static Chart",
@@ -193,6 +196,7 @@ export class Entrenamiento extends Component {
     });
 
     let trainingsize = this.props.trainingsize;
+
     let n_epochs = this.props.n_epochs;
     let learningrate = this.props.learningrate;
     let n_hiddenlayers = this.props.n_hiddenlayers;
@@ -241,43 +245,8 @@ export class Entrenamiento extends Component {
       />
     );
   }
-  renderModal() {
-    const [open, setOpen] = React.useState(false);
-    return (
-      <Modal
-        closeIcon
-        open={open}
-        trigger={<Button>Show Modal</Button>}
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-      >
-        <Header icon="archive" content="Archive Old Messages" />
-        <Modal.Content>
-          <p>
-            Your inbox is getting full, would you like us to enable automatic
-            archiving of old messages?
-          </p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color="red" onClick={() => setOpen(false)}>
-            <Icon name="remove" /> No
-          </Button>
-          <Button color="green" onClick={() => setOpen(false)}>
-            <Icon name="checkmark" /> Yes
-          </Button>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
+
   render() {
-    //console.log(this.props.const_window_size);
-
-    //let ray = this.getDatax();
-    //console.log(this.getSerie());
-    //let array = this.ComputeSMA(this.getSerie(), this.props.const_window_size);
-    //console.log(this.getSerie());
-    //console.log(array);
-
     return (
       <Segment.Group raised>
         <Segment raised>
@@ -298,17 +267,12 @@ export class Entrenamiento extends Component {
             color={"teal"}
           />
         </Segment>
+        <ModalForm />
         <Segment textAlign="center">
           <Button.Group labeled icon color="violet" inverted>
             <Button
               icon="play"
               content="ENTRENAR MODELO"
-              //onClick={e => this.clickGenerar(e)}
-              onClick={this.clickGenerar.bind(this)}
-            />
-            <Button
-              icon="cog"
-              content="Parametrizar"
               //onClick={e => this.clickGenerar(e)}
               onClick={this.clickGenerar.bind(this)}
             />
