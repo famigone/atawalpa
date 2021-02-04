@@ -32,3 +32,6 @@ Finally, the prediction is performed at the N configured time steps.
 This entire process can be parameterized to reduce or increase the capabilities of the underlying LSTM model. 
 
 <img src="https://github.com/famigone/atawalpa/blob/master/public/img/config2.png" width="400" />
+
+## Underlying Technology
+TensorFlow.js - NodeJs - MeteorJs - React - MongoDb - Mosquitto - Mqtt
