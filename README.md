@@ -28,3 +28,7 @@ Once the loss levels are acceptable, the model is validated.
 Finally, the prediction is performed at the N configured time steps. 
 
 <img src="https://github.com/famigone/atawalpa/blob/master/public/img/prediccion.png" width="400" />
+
+This entire process can be parameterized to reduce or increase the capabilities of the underlying LSTM model. 
+
+<img src="https://github.com/famigone/atawalpa/blob/master/public/img/config2.png" width="400" />
