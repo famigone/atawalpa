@@ -57,7 +57,7 @@ export class Prediccion extends Component {
   }
 
   onClickPredict() {
-    let sma_vec = this.props.vectorSMA;
+    let sma_vec = this.props.tensor;
     let data_raw = this.props.events;
     let data_temporal_resolutions = "Weekly";
     let inputs = sma_vec.map(function(inp_f) {
@@ -251,17 +251,17 @@ export default withTracker(
     limite,
     const_window_size,
     model,
-    vectorSMA,
+    tensor,
     trainingsize,
     const_future_steps
   }) => {
-    //console.log(vectorSMA);
+    //console.log(tensor);
     return {
       events: eventos,
       const_window_size: const_window_size,
       model: model,
       trainingsize: trainingsize,
-      vectorSMA: vectorSMA,
+      tensor: tensor,
       const_future_steps: const_future_steps
       //    isLoading: isLoading
     };

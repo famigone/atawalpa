@@ -99,7 +99,7 @@ export class SensorHome extends Component {
         const_future_steps={this.props.config.const_future_steps + 1}
         model={this.state.model}
         eventos={this.props.eventsPrediccion}
-        vectorSMA={this.state.tensor}
+        tensor={this.state.tensor}
         trainingsize={this.props.config.trainingsize}
         n_epochs={this.props.config.n_epochs}
         learningrate={this.props.config.learningrate}
@@ -116,7 +116,7 @@ export class SensorHome extends Component {
         limite={this.props.config.const_limit_mms}
         const_window_size={this.props.config.const_window_size}
         model={this.state.model}
-        vectorSMA={this.state.tensor.reverse()}
+        tensor={this.state.tensor.reverse()}
         trainingsize={this.props.config.trainingsize}
         const_future_steps={this.props.config.const_future_steps + 1}
       />

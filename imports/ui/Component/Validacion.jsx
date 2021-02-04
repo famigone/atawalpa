@@ -127,7 +127,7 @@ export class Validacion extends Component {
     //return this.props.events.length - this.props.const_window_size;
   }
   onClickValidate() {
-    let sma_vec = this.props.vectorSMA;
+    let sma_vec = this.props.tensor;
     let inputs = sma_vec.map(function(inp_f) {
       return inp_f["set"].map(function(val) {
         return parseFloat(val["y"]);
@@ -235,18 +235,18 @@ export default withTracker(
     limite,
     const_window_size,
     model,
-    vectorSMA,
+    tensor,
     trainingsize,
     const_future_steps
   }) => {
-    //console.log(vectorSMA);
+    //console.log(tensor);
     return {
       events: eventos,
       const_window_size: const_window_size,
       model: model,
       const_future_steps: const_future_steps,
       trainingsize: trainingsize,
-      vectorSMA: vectorSMA
+      tensor: tensor
       //    isLoading: isLoading
     };
   }
