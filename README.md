@@ -1,6 +1,6 @@
 <center><img src="https://github.com/famigone/atawalpa/blob/master/public/img/logo128teal.png" /></center>
 
-<b>ATAWALPA</b> is a predictive stack designed to study technological transformation opportunities in small companies. It can be used as an approach to Industry 4.0 approaches, monitoring physical or productive processes. It allowing to experiment with forecast at N time steps into the future.  
+<b>ATAWALPA</b> is a predictive stack designed to study technological transformation opportunities in small companies. It can be used as an approach to Industry 4.0 strategy, monitoring physical or productive processes. It allowing to experiment with forecast at N time steps into the future.  
 
 ## Telemetry
 <b>ATAWALPA</b> solves the telemetry of any physical magnitude that is read through a PLC and sent by MQTT protocol. 
