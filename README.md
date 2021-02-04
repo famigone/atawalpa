@@ -1,5 +1,5 @@
-![logo](https://github.com/famigone/atawalpa/blob/master/public/img/logo64teal.png)
-# ATAWALPA 
+<center><img src="https://github.com/famigone/atawalpa/blob/master/public/img/logo128teal.png" /></center>
+
 Atawalpa is a predictive stack designed to study technological transformation opportunities in small companies. It can be used as an approach to Industry 4.0 approaches, monitoring physical or productive processes and allowing you to experiment with your forecast at N time steps into the future.  
 
 ## Telemetry
